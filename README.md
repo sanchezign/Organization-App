@@ -54,5 +54,5 @@ npm run dev
 
 ![Descripción de la imagen](https://lautaro-rodriguez-collins.vercel.app/_astro/note-app.CZaktkcL.png)
 
----
-Desarrollado por [Lautaro-R-collins]
+
+
