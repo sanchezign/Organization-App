@@ -1,4 +1,4 @@
-# ToDo FullStack App 📝
+# Organization-App 📝
 
 Aplicación web para la gestión de tareas, notas y organización personal. Desarrollada con React y siguiendo las mejores prácticas de diseño y arquitectura.
 
@@ -52,7 +52,8 @@ npm run dev
 
 ## 📸 vista
 
-![Descripción de la imagen](https://lautaro-rodriguez-collins.vercel.app/_astro/note-app.CZaktkcL.png)
+<img width="1232" height="676" alt="Organization" src="https://github.com/user-attachments/assets/9ac98c44-d242-4bc6-959f-ca5556fd6485" />
+
 
 
 
