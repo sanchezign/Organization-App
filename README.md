@@ -50,7 +50,7 @@ npm install
 npm run dev
 ```
 
-## 📸 vista
+## 📸 Vista: [Organization-App](https://organization-app-chi.vercel.app/)
 
 <img width="1232" height="676" alt="Organization" src="https://github.com/user-attachments/assets/9ac98c44-d242-4bc6-959f-ca5556fd6485" />
 
