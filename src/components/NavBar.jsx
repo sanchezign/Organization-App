@@ -30,8 +30,10 @@ export const NavBar = ({ isSidebarOpen, toggleSidebar }) => {
           <>
             <span className="hidden sm:inline font-bold">
               Hola,{" "}
-              {user.name.charAt(0).toUpperCase() +
-                user.name.slice(1).toLowerCase()}
+              {user.username
+                ? user.username.charAt(0).toUpperCase() +
+                  user.username.slice(1).toLowerCase()
+                : user.name || "Usuario"}
             </span>
             <button className="btn btn-ghost btn-primary" onClick={logout}>
               Salir <IoIosLogOut className="text-2xl" />
