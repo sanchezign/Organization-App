@@ -1,3 +1,4 @@
+// src/context/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -6,13 +7,21 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // chequea si hay token y usuario
+  // Cargar usuario desde localStorage de forma segura
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (token && storedUser) {
-      setUser(storedUser);
+    const userString = localStorage.getItem("user");
+
+    if (token && userString && userString !== "undefined") {
+      try {
+        const storedUser = JSON.parse(userString);
+        setUser(storedUser);
+      } catch (error) {
+        console.error("Error al parsear usuario:", error);
+        localStorage.removeItem("user");
+      }
     }
+
     setLoading(false);
   }, []);
 
@@ -22,6 +31,20 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
+  const loginAsGuest = () => {
+    const guestUser = {
+      id: "guest",
+      name: "Invitado",
+      email: "guest@organization.app",
+      role: "guest"
+    };
+    const fakeToken = "guest-token-" + Date.now();
+
+    localStorage.setItem("token", fakeToken);
+    localStorage.setItem("user", JSON.stringify(guestUser));
+    setUser(guestUser);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -29,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, loginAsGuest, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
