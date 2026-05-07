@@ -1,12 +1,13 @@
 // src/pages/LoginPage.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext.jsx";
+import api from "../api/axiosConfig.js";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, loginAsGuest } = useAuth();
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,38 +17,24 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      // Simulación de login (sin backend)
-      const fakeUser = {
-        id: Date.now().toString(),
-        name: form.email.split("@")[0],
-        email: form.email,
-        role: "user"
-      };
-      const fakeToken = "fake-token-" + Date.now();
-
-      login(fakeUser, fakeToken);
+      const response = await api.post("/api/auth/login", form);
+      const { token, user } = response.data;
+      login(user, token);
       toast.success("Login exitoso!");
       navigate("/home");
     } catch (error) {
-      toast.error("Error en el login");
+      const msg = error.response?.data?.message || "Error en el login";
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleGuestLogin = () => {
-    loginAsGuest();
-    toast.success("Entrando como invitado...");
-    navigate("/home");
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
       <div className="w-full max-w-md p-6 rounded bg-base-300">
         <h2 className="text-2xl font-bold mb-6 text-center">Iniciar sesión</h2>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
@@ -75,15 +62,12 @@ const LoginPage = () => {
             {isLoading ? "Ingresando..." : "Iniciar sesión"}
           </button>
         </form>
-
-        <div className="divider my-6">O</div>
-
-        <button
-          onClick={handleGuestLogin}
-          className="w-full btn btn-outline btn-secondary p-3 rounded cursor-pointer font-medium"
-        >
-          Entrar como Invitado
-        </button>
+        <p className="text-center mt-4 text-sm">
+          ¿No tenés cuenta?{" "}
+          <Link to="/register" className="text-primary hover:underline">
+            Registrate
+          </Link>
+        </p>
       </div>
     </div>
   );
