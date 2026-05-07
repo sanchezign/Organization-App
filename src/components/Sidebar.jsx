@@ -12,11 +12,11 @@ const Sidebar = ({
 }) => {
   const { user } = useAuth();
 
-  // Safety check si el usuario es null
   if (!user) return null;
 
+  const displayName = user.username || user.name || "Usuario";
   const userName =
-    user.name.charAt(0).toUpperCase() + user.name.slice(1).toLowerCase();
+    displayName.charAt(0).toUpperCase() + displayName.slice(1).toLowerCase();
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
@@ -28,7 +28,6 @@ const Sidebar = ({
         `}
       >
         <div className="flex flex-col h-full">
-          {/* Avatar */}
           <div className="flex items-center gap-3 p-4 shrink-0 mt-2">
             <div className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center">
               <span className="text-lg font-bold">{userInitial}</span>
@@ -38,7 +37,6 @@ const Sidebar = ({
             )}
           </div>
 
-          {/* Navegación Desktop */}
           <SidebarContent
             isOpen={isOpen}
             boards={boards}
@@ -65,7 +63,6 @@ const Sidebar = ({
             <span className="font-semibold text-lg">{userName}</span>
           </div>
 
-          {/* Navegación Mobile */}
           <SidebarContent
             isOpen={true}
             boards={boards}
