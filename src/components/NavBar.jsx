@@ -7,9 +7,10 @@ import ThemeSwitcher from "./ThemeSwitcher";
 export const NavBar = ({ isSidebarOpen, toggleSidebar }) => {
   const { user, logout } = useAuth();
 
+  const displayName = user?.username || user?.name || "Usuario";
+
   return (
     <nav className="flex items-center navbar bg-base-300/95 backdrop-blur-sm px-4 fixed top-0 left-0 w-full z-[1000]">
-      {/* menú hamburguesa para sidebar */}
       {toggleSidebar && (
         <button
           onClick={toggleSidebar}
@@ -19,21 +20,17 @@ export const NavBar = ({ isSidebarOpen, toggleSidebar }) => {
         </button>
       )}
 
-      {/* Selector de tema */}
       <div className="ml-2">
         <ThemeSwitcher />
       </div>
 
-      {/* Acciones de usuario */}
       <div className="flex gap-2 ml-auto items-center">
         {user ? (
           <>
             <span className="hidden sm:inline font-bold">
               Hola,{" "}
-              {user.username
-                ? user.username.charAt(0).toUpperCase() +
-                  user.username.slice(1).toLowerCase()
-                : user.name || "Usuario"}
+              {displayName.charAt(0).toUpperCase() +
+                displayName.slice(1).toLowerCase()}
             </span>
             <button className="btn btn-ghost btn-primary" onClick={logout}>
               Salir <IoIosLogOut className="text-2xl" />
