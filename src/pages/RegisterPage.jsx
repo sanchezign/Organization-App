@@ -1,15 +1,14 @@
+// src/pages/RegisterPage.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext.jsx";
-
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,14 +16,27 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
-      const res = await axios.post(`${apiUrl}/api/auth/register`, form);
-      login(res.data.user, res.data.token);
-      toast.success("Registro exitoso, bienvenido!");
-      navigate("/");
+      // Simulamos registro exitoso (modo local)
+      const fakeUser = {
+        id: Date.now().toString(),
+        name: form.name,
+        email: form.email,
+        role: "user"
+      };
+      const fakeToken = "fake-token-" + Date.now();
+
+      login(fakeUser, fakeToken);
+      
+      toast.success("Registro exitoso! Bienvenido");
+      navigate("/home");        // o "/" si usas otra ruta
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error en el registro");
+      toast.error("Error en el registro");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -32,6 +44,7 @@ const RegisterPage = () => {
     <div className="flex items-center justify-center min-h-screen px-4">
       <div className="w-full max-w-md p-6 rounded bg-base-300">
         <h2 className="text-2xl font-bold mb-6 text-center">Registro</h2>
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -39,7 +52,7 @@ const RegisterPage = () => {
             placeholder="Nombre"
             value={form.name}
             onChange={handleChange}
-            className="w-full bg-base-100 p-2 rounded outline-none focus:outline-none focus:ring-0 focus:border-none"
+            className="w-full bg-base-100 p-3 rounded outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input
@@ -48,7 +61,7 @@ const RegisterPage = () => {
             placeholder="Correo electrónico"
             value={form.email}
             onChange={handleChange}
-            className="w-full bg-base-100 p-2 rounded outline-none focus:outline-none focus:ring-0 focus:border-none"
+            className="w-full bg-base-100 p-3 rounded outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <input
@@ -57,14 +70,15 @@ const RegisterPage = () => {
             placeholder="Contraseña"
             value={form.password}
             onChange={handleChange}
-            className="w-full bg-base-100 p-2 rounded outline-none focus:outline-none focus:ring-0 focus:border-none"
+            className="w-full bg-base-100 p-3 rounded outline-none focus:ring-2 focus:ring-primary"
             required
           />
           <button
             type="submit"
-            className="w-full btn btn-primary p-2 rounded cursor-pointer"
+            disabled={isLoading}
+            className="w-full btn btn-primary p-3 rounded cursor-pointer font-medium"
           >
-            Registrarse
+            {isLoading ? "Registrando..." : "Registrarse"}
           </button>
         </form>
       </div>
